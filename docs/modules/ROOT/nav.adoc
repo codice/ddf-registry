@@ -1,0 +1,21 @@
+.Introduction
+* xref:registry-intro.adoc[Registry Intro]
+
+.Configuring
+* xref:configuring-identity-node.adoc[Configuring Identity Node]
+* xref:connecting-to-registry.adoc[Connecting to a Registry]
+* xref:publishing-to-node.adoc[Publishing to a Node]
+* xref:subscribing-to-node.adoc[Subscribing to a Node]
+
+.Components
+* xref:registry-store.adoc[Registry Store]
+* xref:Csw_Registry_Store.adoc[CSW Registry Store]
+* xref:Registry_Config_Event_Handler.adoc[Registry Config Event Handler]
+* xref:registry-xformer.adoc[Registry Transformer]
+* xref:RegistryPolicyPlugin.adoc[Registry Policy Plugin]
+* xref:registry-policy-plugin.adoc[Registry Policy Plugin]
+* xref:identification-plugin.adoc[Identification Plugin]
+
+.Reference
+* xref:mg-registry.adoc[Registry Configurations]
+* xref:registry-whitelist.adoc[Registry Whitelist]
