@@ -49,11 +49,6 @@
         <commons-collections4.version>4.1</commons-collections4.version>
         <commons-lang3.version>3.9</commons-lang3.version>
         <ddf.jaxb.version>1.0.1</ddf.jaxb.version>
-        <!--
-        NOTE: ddf-sdk.version should be removed if itests no longer require the sdk
-        Most likely DDF 2.22.0
-         -->
-        <ddf-sdk.version>2.19.0</ddf-sdk.version>
         <ddf.support.version>2.3.16</ddf.support.version>
         <ddf.version>2.25.2-SNAPSHOT</ddf.version>
         <felix.configadmin.version>1.9.14</felix.configadmin.version>
@@ -84,7 +79,7 @@
         <ogc-filter-v_1_1_0-schema.thirdparty.version>1.1.0_5</ogc-filter-v_1_1_0-schema.thirdparty.version>
         <ogc-tools-gml-jts.version>1.0.3</ogc-tools-gml-jts.version>
         <org.geotools.bundle.version>${org.geotools.version}_2</org.geotools.bundle.version>
-        <org.geotools.version>19.1</org.geotools.version>
+        <org.geotools.version>20.1</org.geotools.version>
         <osgi.version>5.0.0</osgi.version>
         <ows-v_1_0_0-schema.version>1.1.0</ows-v_1_0_0-schema.version>
         <pax.exam.version>4.13.2.CODICE</pax.exam.version>
