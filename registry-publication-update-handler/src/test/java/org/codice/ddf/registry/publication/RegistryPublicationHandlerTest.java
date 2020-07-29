@@ -37,6 +37,7 @@ import org.codice.ddf.registry.common.RegistryConstants;
 import org.codice.ddf.registry.common.metacard.RegistryObjectMetacardType;
 import org.codice.ddf.registry.federationadmin.service.internal.FederationAdminException;
 import org.codice.ddf.registry.federationadmin.service.internal.RegistryPublicationService;
+import org.codice.ddf.security.impl.Security;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -62,7 +63,7 @@ public class RegistryPublicationHandlerTest {
     MockitoAnnotations.initMocks(this);
     mcard = new MetacardImpl();
     mcard.setAttribute(Metacard.TAGS, RegistryConstants.REGISTRY_TAG);
-    rph = new RegistryPublicationHandler(service, executorService);
+    rph = new RegistryPublicationHandler(service, executorService, new Security());
     eventProperties = new Hashtable<>();
     eventProperties.put("ddf.catalog.event.metacard", mcard);
     event = new Event("myevent", eventProperties);
