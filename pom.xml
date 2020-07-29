@@ -64,7 +64,7 @@
         <jknack.handlebars.version>2.0.0</jknack.handlebars.version>
         <jsoup.version>1.11.3</jsoup.version>
         <jts.spatial4j.version>1.15.0</jts.spatial4j.version>
-        <jts.version>1.14.0</jts.version>
+        <jts.version>1.16.0</jts.version>
         <junit.version>4.12</junit.version>
         <jvnet.jaxb2.version>0.10.0</jvnet.jaxb2.version>
         <karaf.version>4.2.6</karaf.version>
@@ -77,7 +77,7 @@
         <mockito-core.version>2.8.47</mockito-core.version>
         <mockito-all.version>1.10.19</mockito-all.version>
         <ogc-filter-v_1_1_0-schema.thirdparty.version>1.1.0_5</ogc-filter-v_1_1_0-schema.thirdparty.version>
-        <ogc-tools-gml-jts.version>1.0.3</ogc-tools-gml-jts.version>
+        <ogc-tools-gml-jts.version>1.1.90</ogc-tools-gml-jts.version>
         <org.geotools.bundle.version>${org.geotools.version}_2</org.geotools.bundle.version>
         <org.geotools.version>20.1</org.geotools.version>
         <osgi.version>5.0.0</osgi.version>
@@ -124,13 +124,8 @@
                 <version>${jaxb.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.vividsolutions</groupId>
+                <groupId>org.locationtech.jts</groupId>
                 <artifactId>jts-core</artifactId>
-                <version>${jts.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.vividsolutions</groupId>
-                <artifactId>jts-io</artifactId>
                 <version>${jts.version}</version>
             </dependency>
             <dependency>
@@ -374,19 +369,9 @@
                 <scope>compile</scope>
             </dependency>
             <dependency>
-                <groupId>org.jvnet.ogc</groupId>
+                <groupId>io.github.soc</groupId>
                 <artifactId>ogc-tools-gml-jts</artifactId>
                 <version>${ogc-tools-gml-jts.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.vividsolutions</groupId>
-                        <artifactId>jts</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.jvnet.ogc</groupId>
-                        <artifactId>gml-v_3_1_1-schema</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.osgi</groupId>

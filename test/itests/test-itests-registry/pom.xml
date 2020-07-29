@@ -49,19 +49,11 @@
             <groupId>org.ops4j.pax.tinybundles</groupId>
             <artifactId>tinybundles</artifactId>
         </dependency>
-
         <dependency>
             <groupId>ddf.test.itests</groupId>
             <artifactId>test-itests-common</artifactId>
             <version>${ddf.version}</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>ddf.distribution</groupId>
-            <artifactId>sdk-app</artifactId>
-            <version>${ddf-sdk.version}</version>
-            <classifier>features</classifier>
-            <type>xml</type>
         </dependency>
         <dependency>
             <groupId>org.codice.ddf</groupId>
