@@ -46,6 +46,8 @@ public class RegistryPolicyPlugin implements PolicyPlugin {
 
   private Set<String> registryEntryIds = new HashSet<>();
 
+  private final Permissions permissions;
+
   private Map<String, Set<String>> bypassAccessPolicy = new HashMap<>();
 
   private Map<String, Set<String>> createAccessPolicy = new HashMap<>();
@@ -56,7 +58,9 @@ public class RegistryPolicyPlugin implements PolicyPlugin {
 
   private Map<String, Set<String>> readAccessPolicy = new HashMap<>();
 
-  private Permissions permissions;
+  public RegistryPolicyPlugin(Permissions permissions) {
+    this.permissions = permissions;
+  }
 
   public void init() {
     addRemoveIdentity();
@@ -130,10 +134,6 @@ public class RegistryPolicyPlugin implements PolicyPlugin {
    */
   public void setRegistryBypassPolicyStrings(List<String> permStrings) {
     parsePermissionsFromString(permStrings, bypassAccessPolicy);
-  }
-
-  public void setPermissions(Permissions permissions) {
-    this.permissions = permissions;
   }
 
   /**
@@ -294,9 +294,5 @@ public class RegistryPolicyPlugin implements PolicyPlugin {
 
   public Map<String, Set<String>> getReadAccessPolicy() {
     return Collections.unmodifiableMap(readAccessPolicy);
-  }
-
-  public Permissions getPermissions() {
-    return permissions;
   }
 }

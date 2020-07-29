@@ -22,7 +22,6 @@ import ddf.catalog.data.impl.AttributeImpl;
 import ddf.catalog.data.impl.MetacardImpl;
 import ddf.catalog.data.impl.ResultImpl;
 import ddf.catalog.plugin.PolicyResponse;
-import ddf.security.permission.Permissions;
 import ddf.security.permission.impl.PermissionsImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -249,8 +248,7 @@ public class RegistryPolicyPluginTest {
 
   @Test
   public void testUnusedMethods() throws Exception {
-    final Permissions permissions = new PermissionsImpl();
-    RegistryPolicyPlugin rpp = createRegistryPlugin(permissions);
+    RegistryPolicyPlugin rpp = createRegistryPlugin();
     rpp.setRegistryBypassPolicyStrings(Collections.singletonList("role=system-admin"));
     rpp.setCreateAccessPolicyStrings(Collections.singletonList("role=guest"));
     rpp.setUpdateAccessPolicyStrings(Collections.singletonList("role=guest"));
@@ -263,7 +261,6 @@ public class RegistryPolicyPluginTest {
     assertThat(rpp.getCreateAccessPolicy().get("role").iterator().next(), equalTo("guest"));
     assertThat(rpp.getReadAccessPolicy().get("role").iterator().next(), equalTo("guest"));
     assertThat(rpp.getRegistryEntryIds().contains("1234567890abcdefg987654321"), is(true));
-    assertThat(rpp.getPermissions(), is(permissions));
 
     Metacard mcard = new MetacardImpl();
     mcard.setAttribute(new AttributeImpl(Metacard.TAGS, RegistryConstants.REGISTRY_TAG));
@@ -286,13 +283,6 @@ public class RegistryPolicyPluginTest {
   }
 
   private static RegistryPolicyPlugin createRegistryPlugin() {
-    return createRegistryPlugin(new PermissionsImpl());
-  }
-
-  private static RegistryPolicyPlugin createRegistryPlugin(final Permissions permissions) {
-    RegistryPolicyPlugin rpp = new RegistryPolicyPlugin();
-    rpp.setPermissions(permissions);
-
-    return rpp;
+    return new RegistryPolicyPlugin(new PermissionsImpl());
   }
 }
