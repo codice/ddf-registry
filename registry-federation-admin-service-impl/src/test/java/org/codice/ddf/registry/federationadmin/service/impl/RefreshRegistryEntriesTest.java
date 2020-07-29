@@ -36,6 +36,7 @@ import ddf.catalog.operation.SourceResponse;
 import ddf.catalog.operation.impl.SourceResponseImpl;
 import ddf.catalog.source.UnsupportedQueryException;
 import ddf.security.Subject;
+import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -90,8 +91,10 @@ public class RefreshRegistryEntriesTest {
     refreshRegistryEntries.setExecutor(executorService);
     when(registryStore.getId()).thenReturn(TEST_ID);
     when(registryStore.getRegistryId()).thenReturn(TEST_REG_ID);
-    when(security.runAsAdmin(any())).thenCallRealMethod();
-    when(security.runAsAdminWithException(any())).thenCallRealMethod();
+    when(security.runAsAdminWithException(any(PrivilegedExceptionAction.class)))
+        .thenAnswer(invocation -> ((PrivilegedExceptionAction) invocation.getArguments()[0]).run());
+    when(security.runWithSubjectOrElevate(any(Callable.class)))
+        .thenAnswer(invocation -> ((Callable) invocation.getArguments()[0]).call());
     when(security.getSystemSubject()).thenReturn(subject);
     setupSerialExecutor();
   }
