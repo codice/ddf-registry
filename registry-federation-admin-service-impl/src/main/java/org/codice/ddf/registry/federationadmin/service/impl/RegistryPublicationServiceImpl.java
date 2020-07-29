@@ -81,7 +81,7 @@ public class RegistryPublicationServiceImpl implements RegistryPublicationServic
     locations.add(destinationRegistryId);
     locations.remove(NO_PUBLICATIONS);
 
-    ArrayList<String> locArr = new ArrayList<>(locations);
+    List<String> locArr = new ArrayList<>(locations);
 
     metacard.setAttribute(
         new AttributeImpl(RegistryObjectMetacardType.PUBLISHED_LOCATIONS, locArr));
@@ -109,7 +109,7 @@ public class RegistryPublicationServiceImpl implements RegistryPublicationServic
       locations.add(NO_PUBLICATIONS);
     }
 
-    ArrayList<String> locArr = new ArrayList<>();
+    List<String> locArr = new ArrayList<>();
     locArr.addAll(locations);
 
     metacard.setAttribute(

@@ -56,6 +56,8 @@ public class RegistryPolicyPlugin implements PolicyPlugin {
 
   private Map<String, Set<String>> readAccessPolicy = new HashMap<>();
 
+  private Permissions permissions;
+
   public void init() {
     addRemoveIdentity();
   }
@@ -130,6 +132,10 @@ public class RegistryPolicyPlugin implements PolicyPlugin {
     parsePermissionsFromString(permStrings, bypassAccessPolicy);
   }
 
+  public void setPermissions(Permissions permissions) {
+    this.permissions = permissions;
+  }
+
   /**
    * Parses a string array representation of permission attributes
    *
@@ -165,7 +171,7 @@ public class RegistryPolicyPlugin implements PolicyPlugin {
       Attribute securityAttribute = input.getAttribute(RegistryObjectMetacardType.SECURITY_LEVEL);
       if (securityAttribute != null) {
         securityAttributes.putAll(
-            Permissions.parsePermissionsFromString(
+            permissions.parsePermissionsFromString(
                 securityAttribute
                     .getValues()
                     .stream()
@@ -288,5 +294,9 @@ public class RegistryPolicyPlugin implements PolicyPlugin {
 
   public Map<String, Set<String>> getReadAccessPolicy() {
     return Collections.unmodifiableMap(readAccessPolicy);
+  }
+
+  public Permissions getPermissions() {
+    return permissions;
   }
 }

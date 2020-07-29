@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 import org.codice.ddf.registry.common.metacard.RegistryObjectMetacardType;
 import org.codice.ddf.registry.common.metacard.RegistryUtility;
 import org.codice.ddf.registry.federationadmin.service.internal.FederationAdminService;
-import org.codice.ddf.security.common.Security;
+import org.codice.ddf.security.Security;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 import org.slf4j.Logger;
@@ -52,6 +52,12 @@ public class RegistryPublicationManager implements EventHandler {
 
   private ScheduledExecutorService executorService;
 
+  private final Security security;
+
+  public RegistryPublicationManager(Security security) {
+    this.security = security;
+  }
+
   @Override
   public void handleEvent(Event event) {
     Metacard mcard = (Metacard) event.getProperty(METACARD_PROPERTY);
@@ -78,8 +84,7 @@ public class RegistryPublicationManager implements EventHandler {
   public void setPublications() {
     try {
       List<Metacard> metacards =
-          Security.getInstance()
-              .runAsAdminWithException(() -> federationAdminService.getRegistryMetacards());
+          security.runAsAdminWithException(() -> federationAdminService.getRegistryMetacards());
 
       for (Metacard metacard : metacards) {
         String registryId = RegistryUtility.getRegistryId(metacard);

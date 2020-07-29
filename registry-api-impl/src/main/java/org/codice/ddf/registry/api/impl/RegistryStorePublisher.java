@@ -26,7 +26,7 @@ import org.codice.ddf.registry.api.internal.RegistryStore;
 import org.codice.ddf.registry.common.metacard.RegistryUtility;
 import org.codice.ddf.registry.federationadmin.service.internal.FederationAdminService;
 import org.codice.ddf.registry.federationadmin.service.internal.RegistryPublicationService;
-import org.codice.ddf.security.common.Security;
+import org.codice.ddf.security.Security;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -62,6 +62,12 @@ public class RegistryStorePublisher implements EventHandler {
   private FederationAdminService federationAdminService;
 
   private ScheduledExecutorService executor;
+
+  private final Security security;
+
+  public RegistryStorePublisher(Security security) {
+    this.security = security;
+  }
 
   public void setFederationAdminService(FederationAdminService federationAdminService) {
     this.federationAdminService = federationAdminService;
@@ -141,8 +147,6 @@ public class RegistryStorePublisher implements EventHandler {
     executor.schedule(
         () -> {
           try {
-            Security security = Security.getInstance();
-
             Optional<Metacard> registryIdentityMetacardOpt =
                 security.runAsAdminWithException(
                     () -> federationAdminService.getLocalRegistryIdentityMetacard());

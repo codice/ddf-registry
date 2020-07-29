@@ -61,10 +61,6 @@
             <artifactId>platform-util</artifactId>
         </dependency>
         <dependency>
-            <groupId>ddf.security</groupId>
-            <artifactId>ddf-security-common</artifactId>
-        </dependency>
-        <dependency>
             <groupId>ddf.platform.util</groupId>
             <artifactId>util-uuidgenerator-api</artifactId>
             <version>${ddf.version}</version>
@@ -87,7 +83,6 @@
                         <Embed-Dependency>
                             platform-util,
                             registry-common,
-                            ddf-security-common,
                             catalog-core-api-impl;scope=!test
                         </Embed-Dependency>
                         <Import-Package>

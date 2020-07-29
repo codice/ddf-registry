@@ -39,6 +39,7 @@ import ddf.catalog.source.IngestException;
 import ddf.catalog.source.UnsupportedQueryException;
 import ddf.security.SecurityConstants;
 import ddf.security.encryption.EncryptionService;
+import ddf.security.permission.Permissions;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
@@ -58,13 +59,14 @@ import oasis.names.tc.ebxml_regrep.xsd.rim._3.RegistryPackageType;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections4.map.PassiveExpiringMap;
 import org.apache.commons.lang.StringUtils;
-import org.codice.ddf.cxf.client.ClientFactoryFactory;
+import org.codice.ddf.cxf.client.ClientBuilderFactory;
 import org.codice.ddf.parser.ParserException;
 import org.codice.ddf.registry.api.internal.RegistryStore;
 import org.codice.ddf.registry.common.RegistryConstants;
 import org.codice.ddf.registry.common.metacard.RegistryObjectMetacardType;
 import org.codice.ddf.registry.common.metacard.RegistryUtility;
 import org.codice.ddf.registry.schemabindings.helper.MetacardMarshaller;
+import org.codice.ddf.security.Security;
 import org.codice.ddf.spatial.ogc.catalog.common.AvailabilityCommand;
 import org.codice.ddf.spatial.ogc.csw.catalog.common.CswSourceConfiguration;
 import org.codice.ddf.spatial.ogc.csw.catalog.common.source.AbstractCswStore;
@@ -124,14 +126,26 @@ public class RegistryStoreImpl extends AbstractCswStore implements RegistryStore
       BundleContext context,
       CswSourceConfiguration cswSourceConfiguration,
       Converter provider,
-      ClientFactoryFactory clientFactoryFactory,
-      EncryptionService encryptionService) {
-    super(context, cswSourceConfiguration, provider, clientFactoryFactory, encryptionService);
+      ClientBuilderFactory clientBuilderFactory,
+      EncryptionService encryptionService,
+      Security security,
+      Permissions permissions) {
+    super(
+        context,
+        cswSourceConfiguration,
+        provider,
+        clientBuilderFactory,
+        encryptionService,
+        security,
+        permissions);
   }
 
   public RegistryStoreImpl(
-      EncryptionService encryptionService, ClientFactoryFactory clientFactoryFactory) {
-    super(encryptionService, clientFactoryFactory);
+      EncryptionService encryptionService,
+      ClientBuilderFactory clientBuilderFactory,
+      Security security,
+      Permissions permissions) {
+    super(encryptionService, clientBuilderFactory, security, permissions);
   }
 
   @Override

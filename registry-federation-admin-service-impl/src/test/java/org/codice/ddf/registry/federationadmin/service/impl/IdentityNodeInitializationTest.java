@@ -51,6 +51,7 @@ import org.codice.ddf.registry.federationadmin.service.internal.FederationAdminE
 import org.codice.ddf.registry.schemabindings.helper.InternationalStringTypeHelper;
 import org.codice.ddf.registry.schemabindings.helper.MetacardMarshaller;
 import org.codice.ddf.registry.transformer.RegistryTransformer;
+import org.codice.ddf.security.impl.Security;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -85,7 +86,8 @@ public class IdentityNodeInitializationTest {
   public void setUp() {
     parser = spy(new XmlParser());
     setupSerialExecutor();
-    identityNodeInitialization = spy(new IdentityNodeInitialization(executorService, 10));
+    identityNodeInitialization =
+        spy(new IdentityNodeInitialization(executorService, 10, new Security()));
     registryTransformer = spy(new RegistryTransformer());
     metacardMarshaller = spy(new MetacardMarshaller(parser));
     registryTransformer.setParser(parser);

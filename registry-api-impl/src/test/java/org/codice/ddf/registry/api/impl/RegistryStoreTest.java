@@ -18,9 +18,6 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyBoolean;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -53,12 +50,16 @@ import ddf.catalog.source.IngestException;
 import ddf.catalog.source.UnsupportedQueryException;
 import ddf.security.SecurityConstants;
 import ddf.security.Subject;
+import ddf.security.audit.SecurityLogger;
 import ddf.security.encryption.EncryptionService;
+import ddf.security.permission.impl.PermissionsImpl;
+import ddf.security.service.SecurityManager;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Dictionary;
@@ -76,13 +77,18 @@ import net.opengis.cat.csw.v_2_0_2.TransactionResponseType;
 import net.opengis.cat.csw.v_2_0_2.TransactionSummaryType;
 import net.opengis.cat.csw.v_2_0_2.dc.elements.SimpleLiteral;
 import net.opengis.filter.v_1_1_0.FilterType;
-import org.codice.ddf.cxf.client.ClientFactoryFactory;
+import org.codice.ddf.cxf.client.ClientBuilder;
+import org.codice.ddf.cxf.client.ClientBuilderFactory;
 import org.codice.ddf.cxf.client.SecureCxfClientFactory;
+import org.codice.ddf.cxf.client.impl.ClientBuilderImpl;
+import org.codice.ddf.cxf.oauth.OAuthSecurity;
 import org.codice.ddf.parser.Parser;
 import org.codice.ddf.parser.xml.XmlParser;
 import org.codice.ddf.registry.common.RegistryConstants;
 import org.codice.ddf.registry.common.metacard.RegistryObjectMetacardType;
 import org.codice.ddf.registry.schemabindings.helper.MetacardMarshaller;
+import org.codice.ddf.security.impl.Security;
+import org.codice.ddf.security.jaxrs.SamlSecurity;
 import org.codice.ddf.spatial.ogc.catalog.common.AvailabilityCommand;
 import org.codice.ddf.spatial.ogc.csw.catalog.common.Csw;
 import org.codice.ddf.spatial.ogc.csw.catalog.common.CswAxisOrder;
@@ -90,6 +96,7 @@ import org.codice.ddf.spatial.ogc.csw.catalog.common.CswSourceConfiguration;
 import org.codice.ddf.spatial.ogc.csw.catalog.common.source.CswFilterFactory;
 import org.codice.ddf.spatial.ogc.csw.catalog.common.transaction.CswTransactionRequest;
 import org.codice.ddf.spatial.ogc.csw.catalog.common.transformer.TransformerManager;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -112,7 +119,7 @@ public class RegistryStoreTest {
 
   private CswSourceConfiguration cswSourceConfiguration;
 
-  private ClientFactoryFactory clientFactoryFactory;
+  private ClientBuilderFactory mockClientBuilderFactory;
 
   private SecureCxfClientFactory factory;
 
@@ -142,44 +149,24 @@ public class RegistryStoreTest {
     marshaller = new MetacardMarshaller(new XmlParser());
     context = mock(BundleContext.class);
     provider = mock(Converter.class);
-    cswSourceConfiguration = new CswSourceConfiguration();
+    final String url = "http://www.example.com/csw";
+    cswSourceConfiguration =
+        new CswSourceConfiguration(mock(EncryptionService.class), new PermissionsImpl());
+    cswSourceConfiguration.setCswUrl(url);
     factory = mock(SecureCxfClientFactory.class);
-    clientFactoryFactory = mock(ClientFactoryFactory.class);
-    when(clientFactoryFactory.getSecureCxfClientFactory(any(), any())).thenReturn(factory);
-    when(clientFactoryFactory.getSecureCxfClientFactory(
-            anyString(), any(), any(), any(), anyBoolean(), anyBoolean()))
-        .thenReturn(factory);
-    when(clientFactoryFactory.getSecureCxfClientFactory(
-            anyString(), any(), any(), any(), anyBoolean(), anyBoolean(), any()))
-        .thenReturn(factory);
-    when(clientFactoryFactory.getSecureCxfClientFactory(
-            anyString(), any(), any(), any(), anyBoolean(), anyBoolean(), anyInt(), anyInt()))
-        .thenReturn(factory);
-    when(clientFactoryFactory.getSecureCxfClientFactory(
-            anyString(),
-            any(),
-            any(),
-            any(),
-            anyBoolean(),
-            anyBoolean(),
-            anyInt(),
-            anyInt(),
-            anyString(),
-            anyString()))
-        .thenReturn(factory);
-    when(clientFactoryFactory.getSecureCxfClientFactory(
-            anyString(),
-            any(),
-            any(),
-            any(),
-            anyBoolean(),
-            anyBoolean(),
-            anyInt(),
-            anyInt(),
-            anyString(),
-            anyString(),
-            anyString()))
-        .thenReturn(factory);
+    mockClientBuilderFactory = mock(ClientBuilderFactory.class);
+    final ClientBuilder<Csw> clientBuilder =
+        new ClientBuilderImpl<Csw>(
+            mock(OAuthSecurity.class),
+            mock(SamlSecurity.class),
+            mock(SecurityLogger.class),
+            mock(SecurityManager.class)) {
+          @Override
+          public SecureCxfClientFactory<Csw> build() {
+            return factory;
+          }
+        };
+    when(mockClientBuilderFactory.<Csw>getClientBuilder()).thenReturn(clientBuilder);
     transformer = mock(TransformerManager.class);
     encryptionService = mock(EncryptionService.class);
     configAdmin = mock(ConfigurationAdmin.class);
@@ -192,7 +179,7 @@ public class RegistryStoreTest {
                 context,
                 cswSourceConfiguration,
                 provider,
-                clientFactoryFactory,
+                mockClientBuilderFactory,
                 encryptionService));
 
     registryStore.setFilterBuilder(filterBuilder);
@@ -207,6 +194,11 @@ public class RegistryStoreTest {
 
     when(configAdmin.getConfiguration(any())).thenReturn(configuration);
     when(configuration.getProperties()).thenReturn(properties);
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    //    verifyNoMoreInteractions(mockClientBuilderFactory);
   }
 
   @Test(expected = IngestException.class)
@@ -449,8 +441,10 @@ public class RegistryStoreTest {
                 context,
                 cswSourceConfiguration,
                 provider,
-                clientFactoryFactory,
-                encryptionService) {
+                mockClientBuilderFactory,
+                encryptionService,
+                new Security(),
+                new PermissionsImpl()) {
               @Override
               protected void validateOperation() {}
 
@@ -558,9 +552,17 @@ public class RegistryStoreTest {
         BundleContext context,
         CswSourceConfiguration cswSourceConfiguration,
         Converter provider,
-        ClientFactoryFactory clientFactoryFactory,
-        EncryptionService encryptionService) {
-      super(context, cswSourceConfiguration, provider, clientFactoryFactory, encryptionService);
+        ClientBuilderFactory clientBuilderFactory,
+        EncryptionService encryptionService)
+        throws URISyntaxException {
+      super(
+          context,
+          cswSourceConfiguration,
+          provider,
+          clientBuilderFactory,
+          encryptionService,
+          new Security(),
+          new PermissionsImpl());
       initClientFactory();
     }
 

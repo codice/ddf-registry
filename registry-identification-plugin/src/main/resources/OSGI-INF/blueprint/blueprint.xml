@@ -19,6 +19,7 @@
     <reference id="catalogFramework" interface="ddf.catalog.CatalogFramework"/>
     <reference id="filterBuilder" interface="ddf.catalog.filter.FilterBuilder"/>
     <reference id="uuidGenerator" interface="org.codice.ddf.platform.util.uuidgenerator.UuidGenerator"/>
+    <reference id="security" interface="org.codice.ddf.security.Security"/>
 
     <bean id="metacardMarshaller"
           class="org.codice.ddf.registry.schemabindings.helper.MetacardMarshaller">
@@ -29,6 +30,7 @@
           class="org.codice.ddf.registry.identification.RegistryIdRetriever">
         <property name="catalogFramework" ref="catalogFramework"/>
         <property name="filterBuilder" ref="filterBuilder"/>
+        <argument ref="security"/>
     </bean>
 
     <bean id="identificationPlugin"

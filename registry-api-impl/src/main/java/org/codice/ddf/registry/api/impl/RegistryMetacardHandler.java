@@ -29,7 +29,7 @@ import org.codice.ddf.registry.common.metacard.RegistryObjectMetacardType;
 import org.codice.ddf.registry.common.metacard.RegistryUtility;
 import org.codice.ddf.registry.federationadmin.service.internal.FederationAdminException;
 import org.codice.ddf.registry.federationadmin.service.internal.FederationAdminService;
-import org.codice.ddf.security.common.Security;
+import org.codice.ddf.security.Security;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 import org.slf4j.Logger;
@@ -52,10 +52,13 @@ public class RegistryMetacardHandler implements EventHandler {
 
   private final FederationAdminService federationAdminService;
 
+  private final Security security;
+
   public RegistryMetacardHandler(
-      ExecutorService executor, FederationAdminService federationAdminService) {
+      ExecutorService executor, FederationAdminService federationAdminService, Security security) {
     this.executor = executor;
     this.federationAdminService = federationAdminService;
+    this.security = security;
   }
 
   @Override
@@ -87,8 +90,6 @@ public class RegistryMetacardHandler implements EventHandler {
 
   private void processEvent(Metacard mcard, String topic) {
     try {
-      Security security = Security.getInstance();
-
       security.runAsAdminWithException(
           () -> {
             if (topic.equals(EventProcessor.EVENTS_TOPIC_DELETED)) {

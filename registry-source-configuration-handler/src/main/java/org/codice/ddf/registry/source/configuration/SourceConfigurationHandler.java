@@ -45,7 +45,7 @@ import org.codice.ddf.registry.federationadmin.service.internal.RegistrySourceCo
 import org.codice.ddf.registry.schemabindings.helper.MetacardMarshaller;
 import org.codice.ddf.registry.schemabindings.helper.RegistryPackageTypeHelper;
 import org.codice.ddf.registry.schemabindings.helper.SlotTypeHelper;
-import org.codice.ddf.security.common.Security;
+import org.codice.ddf.security.Security;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
@@ -92,13 +92,15 @@ public class SourceConfigurationHandler implements EventHandler, RegistrySourceC
 
   private ConfigurationAdmin configurationAdmin;
 
-  private FederationAdminService federationAdminService;
+  private final FederationAdminService federationAdminService;
 
   private MetaTypeService metaTypeService;
 
   private MetacardMarshaller metacardMarshaller;
 
-  private ExecutorService executor;
+  private final ExecutorService executor;
+
+  private final Security security;
 
   private String urlBindingName;
 
@@ -117,9 +119,10 @@ public class SourceConfigurationHandler implements EventHandler, RegistrySourceC
   private RegistryPackageTypeHelper registryTypeHelper;
 
   public SourceConfigurationHandler(
-      FederationAdminService federationAdminService, ExecutorService executor) {
+      FederationAdminService federationAdminService, ExecutorService executor, Security security) {
     this.federationAdminService = federationAdminService;
     this.executor = executor;
+    this.security = security;
   }
 
   public void destroy() {
@@ -742,8 +745,7 @@ public class SourceConfigurationHandler implements EventHandler, RegistrySourceC
   private void updateRegistrySourceConfigurations(boolean deleteOldConfig) {
     try {
       List<Metacard> metacards =
-          Security.getInstance()
-              .runAsAdminWithException(() -> federationAdminService.getRegistryMetacards());
+          security.runAsAdminWithException(() -> federationAdminService.getRegistryMetacards());
 
       for (Metacard metacard : metacards) {
         try {

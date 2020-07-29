@@ -49,7 +49,7 @@ import org.codice.ddf.itests.common.XmlSearch;
 import org.codice.ddf.itests.common.csw.mock.FederatedCswMockServer;
 import org.codice.ddf.registry.common.RegistryConstants;
 import org.codice.ddf.registry.federationadmin.service.internal.FederationAdminService;
-import org.codice.ddf.security.common.Security;
+import org.codice.ddf.security.Security;
 import org.codice.ddf.test.common.LoggingUtils;
 import org.codice.ddf.test.common.annotations.AfterExam;
 import org.codice.ddf.test.common.annotations.BeforeExam;
@@ -88,7 +88,7 @@ public class TestRegistry extends AbstractIntegrationTest {
 
   private static final long SLEEP_TIME = 2000;
 
-  private static final Security SECURITY = Security.getInstance();
+  private static final Security SECURITY = new org.codice.ddf.security.impl.Security();
 
   private static String storeId;
 

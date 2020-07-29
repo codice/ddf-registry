@@ -62,7 +62,7 @@ import org.codice.ddf.registry.common.metacard.RegistryUtility;
 import org.codice.ddf.registry.federationadmin.service.internal.FederationAdminException;
 import org.codice.ddf.registry.federationadmin.service.internal.FederationAdminService;
 import org.codice.ddf.registry.schemabindings.helper.MetacardMarshaller;
-import org.codice.ddf.security.common.Security;
+import org.codice.ddf.security.Security;
 import org.geotools.filter.SortByImpl;
 import org.opengis.filter.Filter;
 import org.opengis.filter.expression.PropertyName;
@@ -91,16 +91,8 @@ public class FederationAdminServiceImpl implements FederationAdminService {
 
   private FilterBuilder filterBuilder;
 
-  public FederationAdminServiceImpl() {
-    this(Security.getInstance());
-  }
-
-  FederationAdminServiceImpl(Security security) {
+  public FederationAdminServiceImpl(Security security) {
     this(null, security);
-  }
-
-  FederationAdminServiceImpl(CatalogFramework catalogFramework) {
-    this(catalogFramework, Security.getInstance());
   }
 
   FederationAdminServiceImpl(CatalogFramework catalogFramework, Security security) {

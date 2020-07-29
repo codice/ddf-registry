@@ -55,7 +55,7 @@
          -->
         <ddf-sdk.version>2.19.0</ddf-sdk.version>
         <ddf.support.version>2.3.16</ddf.support.version>
-        <ddf.version>2.21.0</ddf.version>
+        <ddf.version>2.25.2-SNAPSHOT</ddf.version>
         <felix.configadmin.version>1.9.14</felix.configadmin.version>
         <gml-v_3_1_1-schema.version>1.1.0</gml-v_3_1_1-schema.version>
         <google-http-client.version>1.22.0</google-http-client.version>
@@ -192,16 +192,6 @@
             <dependency>
                 <groupId>ddf.platform.util</groupId>
                 <artifactId>platform-util</artifactId>
-                <version>${ddf.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ddf.platform.util</groupId>
-                <artifactId>platform-util-unavailableurls</artifactId>
-                <version>${ddf.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ddf.security</groupId>
-                <artifactId>ddf-security-common</artifactId>
                 <version>${ddf.version}</version>
             </dependency>
             <dependency>
@@ -665,6 +655,21 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>com.coveo</groupId>
+                <artifactId>fmt-maven-plugin</artifactId>
+                <version>2.3.0</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
     <modules>
         <module>registry-policy-plugin</module>
