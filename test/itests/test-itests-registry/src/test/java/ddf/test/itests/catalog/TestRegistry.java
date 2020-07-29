@@ -182,7 +182,6 @@ public class TestRegistry extends AbstractIntegrationTest {
   public void beforeExam() throws Exception {
     try {
       getServiceManager().startFeature(true, CATALOG_REGISTRY);
-      getServiceManager().startFeature(true, CATALOG_REGISTRY_CORE);
       getServiceManager().waitForAllBundles();
 
       cswServer =
