@@ -27,6 +27,9 @@ import static org.codice.ddf.itests.common.csw.CswTestCommons.getCswRegistryStor
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.xml.HasXPath.hasXPath;
+import static org.ops4j.pax.exam.CoreOptions.maven;
+import static org.ops4j.pax.exam.CoreOptions.options;
+import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.features;
 
 import com.google.common.collect.ImmutableMap;
 import com.jayway.restassured.response.Response;
@@ -58,6 +61,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
 import org.ops4j.pax.exam.spi.reactors.PerSuite;
@@ -634,6 +638,21 @@ public class TestRegistry extends AbstractIntegrationTest {
               .untilAsserted(() -> callableAssertion(callable));
           return null;
         });
+  }
+
+  @Override
+  protected Option[] configureStartScript() {
+    Option[] start = super.configureStartScript();
+    Option[] registry =
+        options(
+            features(
+                maven()
+                    .groupId("org.codice.ddf.registry")
+                    .artifactId("registry-app")
+                    .type("xml")
+                    .classifier("features")
+                    .versionAsInProject()));
+    return combineOptions(start, registry);
   }
 
   private static void callableAssertion(final Callable callable) {

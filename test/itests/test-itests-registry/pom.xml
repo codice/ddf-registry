@@ -25,6 +25,7 @@
     <properties>
         <solr.script.dir>${project.build.directory}/solr/bin/</solr.script.dir>
         <solr.port>9784</solr.port>
+        <zookeeper.port>10784</zookeeper.port>
         <skipTests />
         <acdebugger.enabled>true</acdebugger.enabled>
         <acdebugger.port>5505</acdebugger.port>
@@ -66,6 +67,22 @@
             <groupId>ddf.test.itests</groupId>
             <artifactId>test-itests-dependencies-app</artifactId>
             <version>${ddf.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>ddf.test</groupId>
+            <artifactId>features-xml</artifactId>
+            <version>${ddf.version}</version>
+            <classifier>features</classifier>
+            <type>xml</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.codice.ddf.registry</groupId>
+            <artifactId>registry-app</artifactId>
+            <version>${project.version}</version>
+            <classifier>features</classifier>
+            <type>xml</type>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -155,13 +172,6 @@
             <artifactId>catalog-solr-solrclient</artifactId>
             <version>${ddf.version}</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>ddf</groupId>
-            <artifactId>solr-distro</artifactId>
-            <version>${ddf.version}</version>
-            <classifier>assembly</classifier>
-            <type>zip</type>
         </dependency>
         <dependency>
             <groupId>org.ops4j.pax.exam</groupId>
@@ -314,6 +324,7 @@
                             </executable>
                             <arguments>
                                 <argument>start</argument>
+                                <argument>-c</argument>
                                 <argument>-p</argument>
                                 <argument>${solr.port}</argument>
                                 <argument>-m</argument>
