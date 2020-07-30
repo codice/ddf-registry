@@ -96,7 +96,6 @@ import org.codice.ddf.spatial.ogc.csw.catalog.common.CswSourceConfiguration;
 import org.codice.ddf.spatial.ogc.csw.catalog.common.source.CswFilterFactory;
 import org.codice.ddf.spatial.ogc.csw.catalog.common.transaction.CswTransactionRequest;
 import org.codice.ddf.spatial.ogc.csw.catalog.common.transformer.TransformerManager;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -194,11 +193,6 @@ public class RegistryStoreTest {
 
     when(configAdmin.getConfiguration(any())).thenReturn(configuration);
     when(configuration.getProperties()).thenReturn(properties);
-  }
-
-  @After
-  public void tearDown() throws Exception {
-    //    verifyNoMoreInteractions(mockClientBuilderFactory);
   }
 
   @Test(expected = IngestException.class)
