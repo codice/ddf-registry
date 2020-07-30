@@ -46,7 +46,6 @@
                             org.codice.ddf.registry.api.internal
                         </Export-Package>
                         <Import-Package>
-                            !org.codice.ddf.platform.util,
                             *
                         </Import-Package>
                     </instructions>
