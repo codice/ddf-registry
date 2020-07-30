@@ -94,7 +94,6 @@
                             *
                         </Import-Package>
                         <Embed-Dependency>
-                            platform-util,
                             registry-common,
                             catalog-core-api-impl,
                             commons-lang3

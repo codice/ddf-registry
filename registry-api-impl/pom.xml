@@ -227,7 +227,6 @@
                             catalog-core-api-impl,
                             commons-collections4,
                             ogc-tools-gml-jts,
-                            platform-util,
                             jaxb2-basics-runtime,
                             commons-lang3,
                             geospatial

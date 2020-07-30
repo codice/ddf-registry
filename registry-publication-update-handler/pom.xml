@@ -73,8 +73,7 @@
                         <Bundle-Name>${project.name}</Bundle-Name>
                         <Embed-Dependency>
                             catalog-core-api-impl;scope=!test,
-                            registry-common,
-                            platform-util
+                            registry-common
                         </Embed-Dependency>
                         <Import-Package>
                             !org.codice.ddf.platform.util.http,

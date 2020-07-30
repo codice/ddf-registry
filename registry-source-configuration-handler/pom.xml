@@ -81,7 +81,6 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.name}</Bundle-Name>
                         <Embed-Dependency>
-                            platform-util,
                             catalog-core-api-impl;scope=!test,
                             registry-common
                         </Embed-Dependency>

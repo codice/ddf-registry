@@ -100,8 +100,7 @@
                             registry-common,
                             catalog-core-api-impl;scope=!test,
                             jaxb2-basics-runtime,
-                            ogc-tools-gml-jts,
-                            platform-util
+                            ogc-tools-gml-jts
                         </Embed-Dependency>
                         <Import-Package>
                             !org.codice.ddf.platform.util,
