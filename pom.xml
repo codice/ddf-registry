@@ -671,6 +671,7 @@
         <module>registry-source-configuration-handler</module>
         <module>registry-app</module>
         <module>test</module>
+        <module>docs</module>
     </modules>
     <repositories>
         <repository>
