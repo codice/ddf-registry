@@ -35,7 +35,9 @@ import com.google.common.collect.ImmutableMap;
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.response.ValidatableResponse;
 import java.io.IOException;
+import java.security.Principal;
 import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -44,6 +46,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import net.jodah.failsafe.Failsafe;
 import net.jodah.failsafe.RetryPolicy;
 import org.awaitility.Awaitility;
@@ -52,7 +55,6 @@ import org.codice.ddf.itests.common.XmlSearch;
 import org.codice.ddf.itests.common.csw.mock.FederatedCswMockServer;
 import org.codice.ddf.registry.common.RegistryConstants;
 import org.codice.ddf.registry.federationadmin.service.internal.FederationAdminService;
-import org.codice.ddf.security.Security;
 import org.codice.ddf.test.common.LoggingUtils;
 import org.codice.ddf.test.common.annotations.AfterExam;
 import org.codice.ddf.test.common.annotations.BeforeExam;
@@ -91,8 +93,6 @@ public class TestRegistry extends AbstractIntegrationTest {
   private static final String REMOTE_METACARD_ID = "09876543210987654321098765432100";
 
   private static final long SLEEP_TIME = 2000;
-
-  private static final Security SECURITY = new org.codice.ddf.security.impl.Security();
 
   private static String storeId;
 
@@ -585,14 +585,49 @@ public class TestRegistry extends AbstractIntegrationTest {
     return mcardId;
   }
 
-  private boolean areRegistryMetacardsPresent(String regId) throws PrivilegedActionException {
-    return !SECURITY
-        .runAsAdminWithException(
-            () ->
-                getServiceManager()
-                    .getService(FederationAdminService.class)
-                    .getRegistryMetacardsByRegistryIds(Collections.singletonList(regId)))
-        .isEmpty();
+  private boolean areRegistryMetacardsPresent(String regId) {
+    // admin,manager,viewer,systembundles
+    javax.security.auth.Subject javaSubject =
+        new javax.security.auth.Subject(
+            true,
+            Arrays.asList("admin", "manager", "viewer", "systembundles")
+                .stream()
+                .map(TestPrincipal::new)
+                .collect(Collectors.toSet()),
+            Collections.emptySet(),
+            Collections.emptySet());
+    PrivilegedExceptionAction<Void> action =
+        () -> {
+          boolean test =
+              !getServiceManager()
+                  .getService(FederationAdminService.class)
+                  .getRegistryMetacardsByRegistryIds(Collections.singletonList(regId))
+                  .isEmpty();
+          if (!test) {
+            throw new Exception("metacards not present");
+          }
+          return null;
+        };
+    try {
+      javax.security.auth.Subject.doAs(javaSubject, action);
+    } catch (PrivilegedActionException e) {
+      return false;
+    }
+    return true;
+  }
+
+  static class TestPrincipal implements Principal {
+
+    private final String name;
+
+    public TestPrincipal(String name) {
+      this.name = name;
+    }
+
+    @Override
+    public String getName() {
+      return name;
+    }
   }
 
   private String createRegistryStoreEntry(String id, String regId, String remoteRegId)
@@ -627,9 +662,17 @@ public class TestRegistry extends AbstractIntegrationTest {
         .post(CSW_PATH.getUrl());
   }
 
-  private static void waitForCatalogStoreVerify(final Callable callable)
-      throws PrivilegedActionException {
-    SECURITY.runAsAdminWithException(
+  private static void waitForCatalogStoreVerify(final Callable callable) {
+    javax.security.auth.Subject javaSubject =
+        new javax.security.auth.Subject(
+            true,
+            Arrays.asList("admin", "manager", "viewer", "systembundles")
+                .stream()
+                .map(TestPrincipal::new)
+                .collect(Collectors.toSet()),
+            Collections.emptySet(),
+            Collections.emptySet());
+    PrivilegedExceptionAction<Void> action =
         () -> {
           Awaitility.given()
               .pollInterval(5, TimeUnit.SECONDS)
@@ -637,7 +680,12 @@ public class TestRegistry extends AbstractIntegrationTest {
               .atMost(5, TimeUnit.MINUTES)
               .untilAsserted(() -> callableAssertion(callable));
           return null;
-        });
+        };
+    try {
+      javax.security.auth.Subject.doAs(javaSubject, action);
+    } catch (PrivilegedActionException e) {
+      LOGGER.error("Error while waiting for catalog store verify.");
+    }
   }
 
   @Override
