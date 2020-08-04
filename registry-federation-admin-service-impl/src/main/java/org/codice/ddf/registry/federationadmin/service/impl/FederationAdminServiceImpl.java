@@ -559,7 +559,17 @@ public class FederationAdminServiceImpl implements FederationAdminService {
 
   private List<Metacard> getRegistryMetacardsByFilter(Filter filter)
       throws FederationAdminException {
-    return getRegistryMetacardsByFilter(filter, null);
+    try {
+      return security.runWithSubjectOrElevate(() -> getRegistryMetacardsByFilter(filter, null));
+    } catch (SecurityServiceException e) {
+      LOGGER.error("Unable to get registry metacards by filter.", e);
+    } catch (InvocationTargetException e) {
+      if (e.getCause() instanceof FederationAdminException) {
+        throw new FederationAdminException(e.getMessage(), e);
+      }
+      LOGGER.error("Unknown error occurred.", e);
+    }
+    return Collections.emptyList();
   }
 
   private List<Metacard> getRegistryMetacardsByFilter(Filter filter, Set<String> sourceIds)

@@ -35,7 +35,6 @@ import com.google.common.collect.ImmutableMap;
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.response.ValidatableResponse;
 import java.io.IOException;
-import java.security.Principal;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
@@ -47,8 +46,10 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import net.jodah.failsafe.Failsafe;
 import net.jodah.failsafe.RetryPolicy;
+import org.apache.karaf.jaas.boot.principal.RolePrincipal;
 import org.awaitility.Awaitility;
 import org.codice.ddf.itests.common.AbstractIntegrationTest;
 import org.codice.ddf.itests.common.XmlSearch;
@@ -590,9 +591,8 @@ public class TestRegistry extends AbstractIntegrationTest {
     javax.security.auth.Subject javaSubject =
         new javax.security.auth.Subject(
             true,
-            Arrays.asList("admin", "manager", "viewer", "systembundles")
-                .stream()
-                .map(TestPrincipal::new)
+            Stream.of("admin", "manager", "viewer", "systembundles")
+                .map(RolePrincipal::new)
                 .collect(Collectors.toSet()),
             Collections.emptySet(),
             Collections.emptySet());
@@ -614,20 +614,6 @@ public class TestRegistry extends AbstractIntegrationTest {
       return false;
     }
     return true;
-  }
-
-  static class TestPrincipal implements Principal {
-
-    private final String name;
-
-    public TestPrincipal(String name) {
-      this.name = name;
-    }
-
-    @Override
-    public String getName() {
-      return name;
-    }
   }
 
   private String createRegistryStoreEntry(String id, String regId, String remoteRegId)
@@ -666,9 +652,8 @@ public class TestRegistry extends AbstractIntegrationTest {
     javax.security.auth.Subject javaSubject =
         new javax.security.auth.Subject(
             true,
-            Arrays.asList("admin", "manager", "viewer", "systembundles")
-                .stream()
-                .map(TestPrincipal::new)
+            Stream.of("admin", "manager", "viewer", "systembundles")
+                .map(RolePrincipal::new)
                 .collect(Collectors.toSet()),
             Collections.emptySet(),
             Collections.emptySet());
