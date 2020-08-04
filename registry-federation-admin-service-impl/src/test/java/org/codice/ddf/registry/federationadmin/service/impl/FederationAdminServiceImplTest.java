@@ -166,7 +166,7 @@ public class FederationAdminServiceImplTest {
               try {
                 return ((Callable) invocation.getArguments()[0]).call();
               } catch (Exception e) {
-                throw new InvocationTargetException(e.getCause());
+                throw new InvocationTargetException(e);
               }
             });
   }
