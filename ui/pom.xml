@@ -347,7 +347,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Web-ContextPath>/webjars</Web-ContextPath>
+                        <Web-ContextPath>/admin/registry</Web-ContextPath>
                         <_wab>${project.build.directory}/META-INF/resources/webjars,${project.build.directory}/classes/webapp</_wab>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Import-Package>
