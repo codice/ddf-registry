@@ -28,6 +28,8 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.3.0 http://karaf.apache.org/xmlns/features/v1.3.0">
 
+    <repository>mvn:org.codice.ddf.registry/registry-ui/${project.version}/xml/features</repository>
+
     <feature name="registry-core-api" version="${project.version}">
         <bundle>mvn:org.codice.ddf.registry/registry-api/${project.version}</bundle>
         <bundle>mvn:org.codice.ddf.registry/registry-federation-admin-api/${project.version}</bundle>
@@ -50,10 +52,6 @@
         <bundle>mvn:org.codice.ddf.registry/registry-publication-action-provider/${project.version}</bundle>
         <bundle>mvn:org.codice.ddf.registry/registry-admin-local-ui/${project.version}</bundle>
         <bundle>mvn:org.codice.ddf.registry/registry-admin-remote-ui/${project.version}</bundle>
-    </feature>
-
-    <feature name="registry-ui" version="${project.version}" >
-        <bundle>mvn:org.codice.ddf.registry/ui/${project.version}</bundle>
     </feature>
 
     <feature name="registry-app" version="${project.version}"
