@@ -24,7 +24,7 @@
     <groupId>org.codice.ddf.registry</groupId>
     <artifactId>registry-ui</artifactId>
     <name>DDF :: Registry :: UI</name>
-    <packaging>bundle</packaging>
+    <packaging>pom</packaging>
     <properties>
         <buildEnv>production</buildEnv>
         <!--Frontend properties-->

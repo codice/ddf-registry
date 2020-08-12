@@ -669,7 +669,7 @@
         <module>registry-publication-action-provider</module>
         <module>registry-rest-endpoint</module>
         <module>registry-source-configuration-handler</module>
-        <module>ui</module>
+        <module>registry-ui</module>
         <module>registry-app</module>
         <module>test</module>
         <module>docs</module>
