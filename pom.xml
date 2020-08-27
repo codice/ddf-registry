@@ -64,7 +64,7 @@
         <jknack.handlebars.version>2.0.0</jknack.handlebars.version>
         <jsoup.version>1.11.3</jsoup.version>
         <jts.spatial4j.version>1.15.0</jts.spatial4j.version>
-        <jts.version>1.16.0</jts.version>
+        <jts.version>1.17.0</jts.version>
         <junit.version>4.12</junit.version>
         <jvnet.jaxb2.version>0.10.0</jvnet.jaxb2.version>
         <karaf.version>4.2.6</karaf.version>
@@ -530,7 +530,7 @@
                             </goals>
                             <configuration>
                                 <rules>
-                                    <ArtifactSizeEnforcerRule implementation="org.codice.maven.artifactsize.ArtifactSizeEnforcerRule" />
+                                    <ArtifactSizeEnforcerRule implementation="org.codice.maven.artifactsize.ArtifactSizeEnforcerRule"/>
                                 </rules>
                             </configuration>
                         </execution>
