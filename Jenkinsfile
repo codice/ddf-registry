@@ -6,7 +6,7 @@
 pipeline {
     agent {
         node {
-            label 'linux-large'
+            label 'linux-large-ddf'
             customWorkspace "/jenkins/workspace/${JOB_NAME}/${BUILD_NUMBER}"
         }
     }
