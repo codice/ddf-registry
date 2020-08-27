@@ -33,7 +33,7 @@ import java.util.Collections;
 import java.util.concurrent.Callable;
 import org.codice.ddf.registry.common.RegistryConstants;
 import org.codice.ddf.registry.common.metacard.RegistryObjectMetacardType;
-import org.codice.ddf.security.common.Security;
+import org.codice.ddf.security.Security;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

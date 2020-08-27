@@ -68,12 +68,14 @@
             <version>${ddf.version}</version>
         </dependency>
         <dependency>
-            <groupId>ddf.security</groupId>
-            <artifactId>ddf-security-common</artifactId>
-        </dependency>
-        <dependency>
             <groupId>ddf.platform.util</groupId>
             <artifactId>platform-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ddf.security.core</groupId>
+            <artifactId>security-core-services</artifactId>
+            <version>${ddf.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -88,15 +90,12 @@
                         <Export-Package />
                         <Import-Package>
                             !org.codice.ddf.platform.util.http,
-                            !org.codice.ddf.platform.util,
                             *
                         </Import-Package>
                         <Embed-Dependency>
-                            platform-util,
                             registry-common,
                             catalog-core-api-impl,
-                            commons-lang3,
-                            ddf-security-common
+                            commons-lang3
                         </Embed-Dependency>
                     </instructions>
                 </configuration>

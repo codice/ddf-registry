@@ -49,13 +49,8 @@
         <commons-collections4.version>4.1</commons-collections4.version>
         <commons-lang3.version>3.9</commons-lang3.version>
         <ddf.jaxb.version>1.0.1</ddf.jaxb.version>
-        <!--
-        NOTE: ddf-sdk.version should be removed if itests no longer require the sdk
-        Most likely DDF 2.22.0
-         -->
-        <ddf-sdk.version>2.19.0</ddf-sdk.version>
         <ddf.support.version>2.3.16</ddf.support.version>
-        <ddf.version>2.21.0</ddf.version>
+        <ddf.version>2.25.2-SNAPSHOT</ddf.version>
         <felix.configadmin.version>1.9.14</felix.configadmin.version>
         <gml-v_3_1_1-schema.version>1.1.0</gml-v_3_1_1-schema.version>
         <google-http-client.version>1.22.0</google-http-client.version>
@@ -69,7 +64,7 @@
         <jknack.handlebars.version>2.0.0</jknack.handlebars.version>
         <jsoup.version>1.11.3</jsoup.version>
         <jts.spatial4j.version>1.15.0</jts.spatial4j.version>
-        <jts.version>1.14.0</jts.version>
+        <jts.version>1.16.0</jts.version>
         <junit.version>4.12</junit.version>
         <jvnet.jaxb2.version>0.10.0</jvnet.jaxb2.version>
         <karaf.version>4.2.6</karaf.version>
@@ -82,9 +77,9 @@
         <mockito-core.version>2.8.47</mockito-core.version>
         <mockito-all.version>1.10.19</mockito-all.version>
         <ogc-filter-v_1_1_0-schema.thirdparty.version>1.1.0_5</ogc-filter-v_1_1_0-schema.thirdparty.version>
-        <ogc-tools-gml-jts.version>1.0.3</ogc-tools-gml-jts.version>
+        <ogc-tools-gml-jts.version>1.1.90</ogc-tools-gml-jts.version>
         <org.geotools.bundle.version>${org.geotools.version}_2</org.geotools.bundle.version>
-        <org.geotools.version>19.1</org.geotools.version>
+        <org.geotools.version>20.1</org.geotools.version>
         <osgi.version>5.0.0</osgi.version>
         <ows-v_1_0_0-schema.version>1.1.0</ows-v_1_0_0-schema.version>
         <pax.exam.version>4.13.2.CODICE</pax.exam.version>
@@ -129,13 +124,8 @@
                 <version>${jaxb.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.vividsolutions</groupId>
+                <groupId>org.locationtech.jts</groupId>
                 <artifactId>jts-core</artifactId>
-                <version>${jts.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.vividsolutions</groupId>
-                <artifactId>jts-io</artifactId>
                 <version>${jts.version}</version>
             </dependency>
             <dependency>
@@ -192,16 +182,6 @@
             <dependency>
                 <groupId>ddf.platform.util</groupId>
                 <artifactId>platform-util</artifactId>
-                <version>${ddf.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ddf.platform.util</groupId>
-                <artifactId>platform-util-unavailableurls</artifactId>
-                <version>${ddf.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ddf.security</groupId>
-                <artifactId>ddf-security-common</artifactId>
                 <version>${ddf.version}</version>
             </dependency>
             <dependency>
@@ -389,19 +369,9 @@
                 <scope>compile</scope>
             </dependency>
             <dependency>
-                <groupId>org.jvnet.ogc</groupId>
+                <groupId>io.github.soc</groupId>
                 <artifactId>ogc-tools-gml-jts</artifactId>
                 <version>${ogc-tools-gml-jts.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>com.vividsolutions</groupId>
-                        <artifactId>jts</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.jvnet.ogc</groupId>
-                        <artifactId>gml-v_3_1_1-schema</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.osgi</groupId>
@@ -665,6 +635,21 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>com.coveo</groupId>
+                <artifactId>fmt-maven-plugin</artifactId>
+                <version>2.3.0</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
     <modules>
         <module>registry-policy-plugin</module>
@@ -684,8 +669,10 @@
         <module>registry-publication-action-provider</module>
         <module>registry-rest-endpoint</module>
         <module>registry-source-configuration-handler</module>
+        <module>registry-ui</module>
         <module>registry-app</module>
         <module>test</module>
+        <module>docs</module>
     </modules>
     <repositories>
         <repository>

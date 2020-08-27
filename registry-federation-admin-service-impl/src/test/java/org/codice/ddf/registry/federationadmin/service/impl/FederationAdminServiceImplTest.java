@@ -88,7 +88,7 @@ import org.codice.ddf.registry.federationadmin.service.internal.FederationAdminE
 import org.codice.ddf.registry.schemabindings.EbrimConstants;
 import org.codice.ddf.registry.schemabindings.helper.MetacardMarshaller;
 import org.codice.ddf.registry.transformer.RegistryTransformer;
-import org.codice.ddf.security.common.Security;
+import org.codice.ddf.security.Security;
 import org.geotools.filter.FilterFactoryImpl;
 import org.junit.Before;
 import org.junit.Test;
@@ -166,7 +166,7 @@ public class FederationAdminServiceImplTest {
               try {
                 return ((Callable) invocation.getArguments()[0]).call();
               } catch (Exception e) {
-                throw new InvocationTargetException(e.getCause());
+                throw new InvocationTargetException(e);
               }
             });
   }

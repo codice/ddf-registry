@@ -36,6 +36,7 @@ import org.codice.ddf.registry.api.internal.RegistryStore;
 import org.codice.ddf.registry.common.RegistryConstants;
 import org.codice.ddf.registry.common.metacard.RegistryObjectMetacardType;
 import org.codice.ddf.registry.federationadmin.service.internal.FederationAdminService;
+import org.codice.ddf.security.impl.Security;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -70,7 +71,7 @@ public class RegistryStoreCleanupHandlerTest {
   public void setup() {
 
     cleanupHandler =
-        new RegistryStoreCleanupHandler() {
+        new RegistryStoreCleanupHandler(new Security()) {
           @Override
           BundleContext getBundleContext() {
             return context;

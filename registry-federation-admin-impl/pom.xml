@@ -46,10 +46,6 @@
             <artifactId>registry-schema-bindings</artifactId>
         </dependency>
         <dependency>
-            <groupId>ddf.security</groupId>
-            <artifactId>ddf-security-common</artifactId>
-        </dependency>
-        <dependency>
             <groupId>ddf.catalog.core</groupId>
             <artifactId>catalog-core-api</artifactId>
         </dependency>
@@ -80,6 +76,12 @@
             <groupId>ddf.action.core</groupId>
             <artifactId>action-core-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>xmlunit</groupId>
+            <artifactId>xmlunit</artifactId>
+            <version>${xmlunit.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -92,14 +94,12 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Name>${project.name}</Bundle-Name>
                         <Embed-Dependency>
-                            ddf-security-common,
                             registry-common,
                             catalog-core-api-impl;scope=!test,
                             gson
                         </Embed-Dependency>
                         <Import-Package>
                             !org.codice.ddf.platform.util.http,
-                            !org.codice.ddf.platform.util,
                             *
                         </Import-Package>
                         <Export-Package />

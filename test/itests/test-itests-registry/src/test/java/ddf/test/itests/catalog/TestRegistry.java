@@ -27,12 +27,16 @@ import static org.codice.ddf.itests.common.csw.CswTestCommons.getCswRegistryStor
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.xml.HasXPath.hasXPath;
+import static org.ops4j.pax.exam.CoreOptions.maven;
+import static org.ops4j.pax.exam.CoreOptions.options;
+import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.features;
 
 import com.google.common.collect.ImmutableMap;
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.response.ValidatableResponse;
 import java.io.IOException;
 import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -41,15 +45,17 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import net.jodah.failsafe.Failsafe;
 import net.jodah.failsafe.RetryPolicy;
+import org.apache.karaf.jaas.boot.principal.RolePrincipal;
 import org.awaitility.Awaitility;
 import org.codice.ddf.itests.common.AbstractIntegrationTest;
 import org.codice.ddf.itests.common.XmlSearch;
 import org.codice.ddf.itests.common.csw.mock.FederatedCswMockServer;
 import org.codice.ddf.registry.common.RegistryConstants;
 import org.codice.ddf.registry.federationadmin.service.internal.FederationAdminService;
-import org.codice.ddf.security.common.Security;
 import org.codice.ddf.test.common.LoggingUtils;
 import org.codice.ddf.test.common.annotations.AfterExam;
 import org.codice.ddf.test.common.annotations.BeforeExam;
@@ -58,6 +64,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.ops4j.pax.exam.Option;
 import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
 import org.ops4j.pax.exam.spi.reactors.PerSuite;
@@ -87,8 +94,6 @@ public class TestRegistry extends AbstractIntegrationTest {
   private static final String REMOTE_METACARD_ID = "09876543210987654321098765432100";
 
   private static final long SLEEP_TIME = 2000;
-
-  private static final Security SECURITY = Security.getInstance();
 
   private static String storeId;
 
@@ -182,7 +187,6 @@ public class TestRegistry extends AbstractIntegrationTest {
   public void beforeExam() throws Exception {
     try {
       getServiceManager().startFeature(true, CATALOG_REGISTRY);
-      getServiceManager().startFeature(true, CATALOG_REGISTRY_CORE);
       getServiceManager().waitForAllBundles();
 
       cswServer =
@@ -582,14 +586,34 @@ public class TestRegistry extends AbstractIntegrationTest {
     return mcardId;
   }
 
-  private boolean areRegistryMetacardsPresent(String regId) throws PrivilegedActionException {
-    return !SECURITY
-        .runAsAdminWithException(
-            () ->
-                getServiceManager()
-                    .getService(FederationAdminService.class)
-                    .getRegistryMetacardsByRegistryIds(Collections.singletonList(regId)))
-        .isEmpty();
+  private boolean areRegistryMetacardsPresent(String regId) {
+    // admin,manager,viewer,systembundles
+    javax.security.auth.Subject javaSubject =
+        new javax.security.auth.Subject(
+            true,
+            Stream.of("admin", "manager", "viewer", "systembundles")
+                .map(RolePrincipal::new)
+                .collect(Collectors.toSet()),
+            Collections.emptySet(),
+            Collections.emptySet());
+    PrivilegedExceptionAction<Void> action =
+        () -> {
+          boolean test =
+              !getServiceManager()
+                  .getService(FederationAdminService.class)
+                  .getRegistryMetacardsByRegistryIds(Collections.singletonList(regId))
+                  .isEmpty();
+          if (!test) {
+            throw new Exception("metacards not present");
+          }
+          return null;
+        };
+    try {
+      javax.security.auth.Subject.doAs(javaSubject, action);
+    } catch (PrivilegedActionException e) {
+      return false;
+    }
+    return true;
   }
 
   private String createRegistryStoreEntry(String id, String regId, String remoteRegId)
@@ -624,9 +648,16 @@ public class TestRegistry extends AbstractIntegrationTest {
         .post(CSW_PATH.getUrl());
   }
 
-  private static void waitForCatalogStoreVerify(final Callable callable)
-      throws PrivilegedActionException {
-    SECURITY.runAsAdminWithException(
+  private static void waitForCatalogStoreVerify(final Callable callable) {
+    javax.security.auth.Subject javaSubject =
+        new javax.security.auth.Subject(
+            true,
+            Stream.of("admin", "manager", "viewer", "systembundles")
+                .map(RolePrincipal::new)
+                .collect(Collectors.toSet()),
+            Collections.emptySet(),
+            Collections.emptySet());
+    PrivilegedExceptionAction<Void> action =
         () -> {
           Awaitility.given()
               .pollInterval(5, TimeUnit.SECONDS)
@@ -634,7 +665,27 @@ public class TestRegistry extends AbstractIntegrationTest {
               .atMost(5, TimeUnit.MINUTES)
               .untilAsserted(() -> callableAssertion(callable));
           return null;
-        });
+        };
+    try {
+      javax.security.auth.Subject.doAs(javaSubject, action);
+    } catch (PrivilegedActionException e) {
+      LOGGER.error("Error while waiting for catalog store verify.");
+    }
+  }
+
+  @Override
+  protected Option[] configureStartScript() {
+    Option[] start = super.configureStartScript();
+    Option[] registry =
+        options(
+            features(
+                maven()
+                    .groupId("org.codice.ddf.registry")
+                    .artifactId("registry-app")
+                    .type("xml")
+                    .classifier("features")
+                    .versionAsInProject()));
+    return combineOptions(start, registry);
   }
 
   private static void callableAssertion(final Callable callable) {

@@ -34,7 +34,7 @@ public class RegistryUtilityTest {
 
   private Metacard metacard;
 
-  private ArrayList<String> tags = new ArrayList<>();
+  private List<String> tags = new ArrayList<>();
 
   private Attribute tagsAttribute;
 

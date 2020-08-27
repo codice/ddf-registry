@@ -21,6 +21,7 @@
 
     <bean id="federationAdminService"
           class="org.codice.ddf.registry.federationadmin.service.impl.FederationAdminServiceImpl">
+        <argument ref="security"/>
         <property name="catalogFramework" ref="catalogFramework"/>
         <property name="filterBuilder" ref="filterBuilder"/>
         <property name="metacardMarshaller" ref="metacardMarshaller"/>
@@ -30,6 +31,7 @@
     <bean id="refreshRegistryEntries"
           class="org.codice.ddf.registry.federationadmin.service.impl.RefreshRegistryEntries"
           destroy-method="destroy" init-method="init">
+        <argument ref="security"/>
         <cm:managed-properties
                 persistent-id="org.codice.ddf.registry.federationadmin.service.impl.RefreshRegistryEntries"
                 update-strategy="container-managed"/>
@@ -66,6 +68,7 @@
           class="org.codice.ddf.registry.federationadmin.service.impl.IdentityNodeInitialization"
           init-method="init" destroy-method="destroy">
         <argument ref="registryInitializerExecutor"/>
+        <argument ref="security"/>
         <property name="metacardMarshaller" ref="metacardMarshaller"/>
         <property name="registryTransformer" ref="inputTransformer"/>
         <property name="federationAdminService" ref="federationAdminService"/>
@@ -109,5 +112,6 @@
                filter="(id=rim:RegistryPackage)"/>
     <reference id="xmlParser" interface="org.codice.ddf.parser.Parser" filter="(id=xml)"/>
     <reference id="filterBuilder" interface="ddf.catalog.filter.FilterBuilder"/>
+    <reference id="security" interface="org.codice.ddf.security.Security"/>
 
 </blueprint>

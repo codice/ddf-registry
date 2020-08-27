@@ -62,7 +62,7 @@ import org.codice.ddf.registry.common.metacard.RegistryUtility;
 import org.codice.ddf.registry.federationadmin.service.internal.FederationAdminException;
 import org.codice.ddf.registry.federationadmin.service.internal.FederationAdminService;
 import org.codice.ddf.registry.schemabindings.helper.MetacardMarshaller;
-import org.codice.ddf.security.common.Security;
+import org.codice.ddf.security.Security;
 import org.geotools.filter.SortByImpl;
 import org.opengis.filter.Filter;
 import org.opengis.filter.expression.PropertyName;
@@ -91,16 +91,8 @@ public class FederationAdminServiceImpl implements FederationAdminService {
 
   private FilterBuilder filterBuilder;
 
-  public FederationAdminServiceImpl() {
-    this(Security.getInstance());
-  }
-
-  FederationAdminServiceImpl(Security security) {
+  public FederationAdminServiceImpl(Security security) {
     this(null, security);
-  }
-
-  FederationAdminServiceImpl(CatalogFramework catalogFramework) {
-    this(catalogFramework, Security.getInstance());
   }
 
   FederationAdminServiceImpl(CatalogFramework catalogFramework, Security security) {
@@ -567,7 +559,17 @@ public class FederationAdminServiceImpl implements FederationAdminService {
 
   private List<Metacard> getRegistryMetacardsByFilter(Filter filter)
       throws FederationAdminException {
-    return getRegistryMetacardsByFilter(filter, null);
+    try {
+      return security.runWithSubjectOrElevate(() -> getRegistryMetacardsByFilter(filter, null));
+    } catch (SecurityServiceException e) {
+      LOGGER.error("Unable to get registry metacards by filter.", e);
+    } catch (InvocationTargetException e) {
+      if (e.getCause() instanceof FederationAdminException) {
+        throw new FederationAdminException(e.getMessage(), e);
+      }
+      LOGGER.error("Unknown error occurred.", e);
+    }
+    return Collections.emptyList();
   }
 
   private List<Metacard> getRegistryMetacardsByFilter(Filter filter, Set<String> sourceIds)

@@ -25,6 +25,7 @@
     <properties>
         <solr.script.dir>${project.build.directory}/solr/bin/</solr.script.dir>
         <solr.port>9784</solr.port>
+        <zookeeper.port>10784</zookeeper.port>
         <skipTests />
         <acdebugger.enabled>true</acdebugger.enabled>
         <acdebugger.port>5505</acdebugger.port>
@@ -49,19 +50,11 @@
             <groupId>org.ops4j.pax.tinybundles</groupId>
             <artifactId>tinybundles</artifactId>
         </dependency>
-
         <dependency>
             <groupId>ddf.test.itests</groupId>
             <artifactId>test-itests-common</artifactId>
             <version>${ddf.version}</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>ddf.distribution</groupId>
-            <artifactId>sdk-app</artifactId>
-            <version>${ddf-sdk.version}</version>
-            <classifier>features</classifier>
-            <type>xml</type>
         </dependency>
         <dependency>
             <groupId>org.codice.ddf</groupId>
@@ -74,6 +67,22 @@
             <groupId>ddf.test.itests</groupId>
             <artifactId>test-itests-dependencies-app</artifactId>
             <version>${ddf.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>ddf.test</groupId>
+            <artifactId>features-xml</artifactId>
+            <version>${ddf.version}</version>
+            <classifier>features</classifier>
+            <type>xml</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.codice.ddf.registry</groupId>
+            <artifactId>registry-app</artifactId>
+            <version>${project.version}</version>
+            <classifier>features</classifier>
+            <type>xml</type>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -165,13 +174,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>ddf</groupId>
-            <artifactId>solr-distro</artifactId>
-            <version>${ddf.version}</version>
-            <classifier>assembly</classifier>
-            <type>zip</type>
-        </dependency>
-        <dependency>
             <groupId>org.ops4j.pax.exam</groupId>
             <artifactId>pax-exam-features</artifactId>
             <version>${pax.exam.version}</version>
@@ -181,6 +183,18 @@
             <groupId>org.awaitility</groupId>
             <artifactId>awaitility</artifactId>
             <version>${awaitility.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codice.ddf.registry</groupId>
+            <artifactId>registry-common</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.codice.ddf.registry</groupId>
+            <artifactId>registry-federation-admin-service</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -310,6 +324,7 @@
                             </executable>
                             <arguments>
                                 <argument>start</argument>
+                                <argument>-c</argument>
                                 <argument>-p</argument>
                                 <argument>${solr.port}</argument>
                                 <argument>-m</argument>

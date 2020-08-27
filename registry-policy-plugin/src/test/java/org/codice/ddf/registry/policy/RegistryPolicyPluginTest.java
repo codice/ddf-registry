@@ -22,6 +22,7 @@ import ddf.catalog.data.impl.AttributeImpl;
 import ddf.catalog.data.impl.MetacardImpl;
 import ddf.catalog.data.impl.ResultImpl;
 import ddf.catalog.plugin.PolicyResponse;
+import ddf.security.permission.impl.PermissionsImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -281,9 +282,7 @@ public class RegistryPolicyPluginTest {
     assertThat(rpp.isWhiteList(), is(false));
   }
 
-  private RegistryPolicyPlugin createRegistryPlugin() {
-    RegistryPolicyPlugin rpp = new RegistryPolicyPlugin();
-
-    return rpp;
+  private static RegistryPolicyPlugin createRegistryPlugin() {
+    return new RegistryPolicyPlugin(new PermissionsImpl());
   }
 }

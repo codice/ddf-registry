@@ -44,7 +44,7 @@ import org.codice.ddf.registry.common.metacard.RegistryObjectMetacardType;
 import org.codice.ddf.registry.common.metacard.RegistryUtility;
 import org.codice.ddf.registry.federationadmin.service.internal.FederationAdminException;
 import org.codice.ddf.registry.federationadmin.service.internal.FederationAdminService;
-import org.codice.ddf.security.common.Security;
+import org.codice.ddf.security.Security;
 import org.geotools.filter.SortByImpl;
 import org.opengis.filter.Filter;
 import org.opengis.filter.expression.PropertyName;
@@ -82,11 +82,7 @@ public class RefreshRegistryEntries {
 
   private Future scheduledTask;
 
-  private Security security;
-
-  public RefreshRegistryEntries() {
-    this.security = Security.getInstance();
-  }
+  private final Security security;
 
   public RefreshRegistryEntries(Security security) {
     this.security = security;

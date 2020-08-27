@@ -47,7 +47,7 @@ import org.codice.ddf.registry.schemabindings.helper.InternationalStringTypeHelp
 import org.codice.ddf.registry.schemabindings.helper.MetacardMarshaller;
 import org.codice.ddf.registry.schemabindings.helper.RegistryPackageTypeHelper;
 import org.codice.ddf.registry.schemabindings.helper.SlotTypeHelper;
-import org.codice.ddf.security.common.Security;
+import org.codice.ddf.security.Security;
 import org.codice.ddf.spatial.ogc.csw.catalog.common.CswConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,13 +89,17 @@ public class IdentityNodeInitialization {
 
   private final ScheduledExecutorService executor;
 
-  public IdentityNodeInitialization(ScheduledExecutorService executor) {
-    this(executor, DEFAULT_RETRY_INTERVAL_SECONDS);
+  private final Security security;
+
+  public IdentityNodeInitialization(ScheduledExecutorService executor, Security security) {
+    this(executor, DEFAULT_RETRY_INTERVAL_SECONDS, security);
   }
 
-  public IdentityNodeInitialization(ScheduledExecutorService executor, long retryInterval) {
+  public IdentityNodeInitialization(
+      ScheduledExecutorService executor, long retryInterval, Security security) {
     this.retryInterval = retryInterval;
     this.executor = executor;
+    this.security = security;
   }
 
   public void init() {
@@ -121,8 +125,6 @@ public class IdentityNodeInitialization {
 
   boolean updateOrCreateIdentity() {
     try {
-      Security security = Security.getInstance();
-
       security.runAsAdminWithException(
           () -> {
             Optional<Metacard> optional = federationAdminService.getLocalRegistryIdentityMetacard();

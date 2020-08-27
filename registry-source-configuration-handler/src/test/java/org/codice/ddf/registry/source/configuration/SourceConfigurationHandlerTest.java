@@ -50,6 +50,7 @@ import org.codice.ddf.registry.federationadmin.service.internal.FederationAdminS
 import org.codice.ddf.registry.schemabindings.helper.MetacardMarshaller;
 import org.codice.ddf.registry.schemabindings.helper.RegistryPackageTypeHelper;
 import org.codice.ddf.registry.schemabindings.helper.SlotTypeHelper;
+import org.codice.ddf.security.impl.Security;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -102,7 +103,7 @@ public class SourceConfigurationHandlerTest {
     executorService = mock(ExecutorService.class);
 
     sch =
-        new SourceConfigurationHandler(adminService, executorService) {
+        new SourceConfigurationHandler(adminService, executorService, new Security()) {
           @Override
           protected BundleContext getBundleContext() {
             return bundleContext;

@@ -133,7 +133,6 @@
                         </Export-Package>
                         <Import-Package>
                             !org.codice.ddf.platform.util.http,
-                            !org.codice.ddf.platform.util,
                             *
                         </Import-Package>
                         <Private-Package>

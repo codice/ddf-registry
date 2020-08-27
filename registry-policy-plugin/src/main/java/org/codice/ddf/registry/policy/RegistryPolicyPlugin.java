@@ -46,6 +46,8 @@ public class RegistryPolicyPlugin implements PolicyPlugin {
 
   private Set<String> registryEntryIds = new HashSet<>();
 
+  private final Permissions permissions;
+
   private Map<String, Set<String>> bypassAccessPolicy = new HashMap<>();
 
   private Map<String, Set<String>> createAccessPolicy = new HashMap<>();
@@ -55,6 +57,10 @@ public class RegistryPolicyPlugin implements PolicyPlugin {
   private Map<String, Set<String>> deleteAccessPolicy = new HashMap<>();
 
   private Map<String, Set<String>> readAccessPolicy = new HashMap<>();
+
+  public RegistryPolicyPlugin(Permissions permissions) {
+    this.permissions = permissions;
+  }
 
   public void init() {
     addRemoveIdentity();
@@ -165,7 +171,7 @@ public class RegistryPolicyPlugin implements PolicyPlugin {
       Attribute securityAttribute = input.getAttribute(RegistryObjectMetacardType.SECURITY_LEVEL);
       if (securityAttribute != null) {
         securityAttributes.putAll(
-            Permissions.parsePermissionsFromString(
+            permissions.parsePermissionsFromString(
                 securityAttribute
                     .getValues()
                     .stream()

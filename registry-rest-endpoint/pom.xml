@@ -105,7 +105,6 @@
                             registry-common
                         </Embed-Dependency>
                         <Import-Package>
-                            !org.codice.ddf.platform.util,
                             !org.abego.treelayout.*,
                             *
                         </Import-Package>

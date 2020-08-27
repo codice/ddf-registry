@@ -37,6 +37,7 @@ import org.codice.ddf.registry.api.internal.RegistryStore;
 import org.codice.ddf.registry.common.metacard.RegistryObjectMetacardType;
 import org.codice.ddf.registry.federationadmin.service.internal.FederationAdminService;
 import org.codice.ddf.registry.federationadmin.service.internal.RegistryPublicationService;
+import org.codice.ddf.security.impl.Security;
 import org.junit.Before;
 import org.junit.Test;
 import org.osgi.framework.BundleContext;
@@ -46,7 +47,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventConstants;
 
-public class RegistryStorePublisherTest extends RegistryStorePublisher {
+public class RegistryStorePublisherTest {
 
   private static final String PUBLISH = "publish";
 
@@ -93,7 +94,7 @@ public class RegistryStorePublisherTest extends RegistryStorePublisher {
 
     registryStorePublisher =
         spy(
-            new RegistryStorePublisher() {
+            new RegistryStorePublisher(new Security()) {
               @Override
               BundleContext getBundleContext() {
                 return bundleContext;
@@ -112,7 +113,7 @@ public class RegistryStorePublisherTest extends RegistryStorePublisher {
 
   @Test
   public void testBindRegistryStoreNoContext() {
-    registryStorePublisher = spy(new RegistryStorePublisher());
+    registryStorePublisher = spy(new RegistryStorePublisher(new Security()));
     registryStorePublisher.bindRegistryStore(serviceReference);
 
     verify(registryStorePublisher, times(0)).registryPublish(any(), anyString());
@@ -135,7 +136,7 @@ public class RegistryStorePublisherTest extends RegistryStorePublisher {
 
   @Test
   public void testUnbindRegistryStoreNoContext() {
-    registryStorePublisher = spy(new RegistryStorePublisher());
+    registryStorePublisher = spy(new RegistryStorePublisher(new Security()));
     registryStorePublisher.unbindRegistryStore(serviceReference);
 
     verify(registryStorePublisher, times(0)).registryPublish(any(), eq(UNPUBLISH));

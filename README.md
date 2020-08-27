@@ -11,6 +11,14 @@ Distributed Data Framework (DDF) is an open source, modular integration framewor
 
 DDF Registry is a subset of DDF and was pulled out into a separate repo as of DDF 2.20.
 
+## Installing in DDF	
+
+Inside of a DDF karaf console run the following commands:	
+`feature:repo-add mvn:org.codice.ddf.registry/registry-app/2.22.1-SNAPSHOT/xml/features`	
+`feature:install registry-app`	
+
+Change `2.22.1-SNAPSHOT` to whatever the desired or most recent version of ddf-registry.
+
 ## Additional information
 Find documentation about DDF at [codice.org](http://codice.org/ddf/Documentation-versions.html).
 

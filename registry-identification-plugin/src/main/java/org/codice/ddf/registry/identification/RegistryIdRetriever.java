@@ -13,7 +13,6 @@
  */
 package org.codice.ddf.registry.identification;
 
-import com.google.common.annotations.VisibleForTesting;
 import ddf.catalog.CatalogFramework;
 import ddf.catalog.data.Metacard;
 import ddf.catalog.data.Result;
@@ -31,7 +30,7 @@ import java.util.stream.Collectors;
 import org.codice.ddf.registry.common.RegistryConstants;
 import org.codice.ddf.registry.common.metacard.RegistryObjectMetacardType;
 import org.codice.ddf.registry.common.metacard.RegistryUtility;
-import org.codice.ddf.security.common.Security;
+import org.codice.ddf.security.Security;
 import org.opengis.filter.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,13 +52,8 @@ public class RegistryIdRetriever {
 
   private FilterBuilder filterBuilder;
 
-  private Security security;
+  private final Security security;
 
-  public RegistryIdRetriever() {
-    security = Security.getInstance();
-  }
-
-  @VisibleForTesting
   public RegistryIdRetriever(Security security) {
     this.security = security;
   }

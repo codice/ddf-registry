@@ -25,7 +25,7 @@ import org.codice.ddf.registry.api.internal.RegistryStore;
 import org.codice.ddf.registry.common.metacard.RegistryObjectMetacardType;
 import org.codice.ddf.registry.common.metacard.RegistryUtility;
 import org.codice.ddf.registry.federationadmin.service.internal.FederationAdminService;
-import org.codice.ddf.security.common.Security;
+import org.codice.ddf.security.Security;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -54,6 +54,12 @@ public class RegistryStoreCleanupHandler implements EventHandler {
   private boolean cleanupRelatedMetacards = true;
 
   private Map<Object, RegistryStore> registryStorePidToServiceMap = new ConcurrentHashMap<>();
+
+  private final Security security;
+
+  public RegistryStoreCleanupHandler(Security security) {
+    this.security = security;
+  }
 
   public void bindRegistryStore(ServiceReference serviceReference) {
     BundleContext bundleContext = getBundleContext();
@@ -97,8 +103,6 @@ public class RegistryStoreCleanupHandler implements EventHandler {
         () -> {
           String registryId = service.getRegistryId();
           try {
-            Security security = Security.getInstance();
-
             List<Metacard> metacards =
                 security.runAsAdminWithException(
                     () ->

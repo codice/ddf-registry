@@ -39,7 +39,9 @@
     <reference id="registryPublicationService"
                interface="org.codice.ddf.registry.federationadmin.service.internal.RegistryPublicationService"/>
     <reference id="metaTypeService" interface="org.osgi.service.metatype.MetaTypeService"/>
-    <reference id="clientFactoryFactory" interface="org.codice.ddf.cxf.client.ClientFactoryFactory"/>
+    <reference id="clientBuilderFactory" interface="org.codice.ddf.cxf.client.ClientBuilderFactory"/>
+    <reference id="security" interface="org.codice.ddf.security.Security"/>
+    <reference id="permissions" interface="ddf.security.permission.Permissions"/>
 
     <bean id="registryPublisherExecutor" class="java.util.concurrent.Executors"
           factory-method="newSingleThreadScheduledExecutor">
@@ -62,6 +64,7 @@
 
     <bean id="registryPublisher"
           class="org.codice.ddf.registry.api.impl.RegistryStorePublisher">
+        <argument ref="security"/>
         <property name="federationAdminService" ref="federationAdminService"/>
         <property name="registryPublicationService" ref="registryPublicationService"/>
         <property name="executor" ref="registryPublisherExecutor"/>
@@ -69,6 +72,7 @@
 
     <bean id="storeCleanupHandler"
           class="org.codice.ddf.registry.api.impl.RegistryStoreCleanupHandler">
+        <argument ref="security"/>
         <cm:managed-properties
                 persistent-id="org.codice.ddf.registry.api.impl.RegistryStoreCleanupHandler"
                 update-strategy="container-managed"/>
@@ -80,6 +84,7 @@
           class="org.codice.ddf.registry.api.impl.RegistryMetacardHandler" destroy-method="destroy">
         <argument ref="metacardHandlerExecutor"/>
         <argument ref="federationAdminService"/>
+        <argument ref="security"/>
     </bean>
 
     <service ref="registryMetacardHandler" interface="org.osgi.service.event.EventHandler">
@@ -164,7 +169,9 @@
         <cm:managed-component class="org.codice.ddf.registry.api.impl.RegistryStoreImpl"
                               init-method="init" destroy-method="destroy">
             <argument ref="encryptionService"/>
-            <argument ref="clientFactoryFactory"/>
+            <argument ref="clientBuilderFactory"/>
+            <argument ref="security"/>
+            <argument ref="permissions"/>
             <property name="context" ref="blueprintBundleContext"/>
             <property name="filterBuilder" ref="filterBuilder"/>
             <property name="filterAdapter" ref="filterAdapter"/>

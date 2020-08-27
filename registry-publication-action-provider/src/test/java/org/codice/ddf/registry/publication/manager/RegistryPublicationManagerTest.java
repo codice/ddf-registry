@@ -37,6 +37,7 @@ import org.codice.ddf.registry.common.RegistryConstants;
 import org.codice.ddf.registry.common.metacard.RegistryObjectMetacardType;
 import org.codice.ddf.registry.federationadmin.service.internal.FederationAdminException;
 import org.codice.ddf.registry.federationadmin.service.internal.FederationAdminService;
+import org.codice.ddf.security.impl.Security;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -65,7 +66,7 @@ public class RegistryPublicationManagerTest {
 
   @Before
   public void setup() throws Exception {
-    publicationManager = new RegistryPublicationManager();
+    publicationManager = new RegistryPublicationManager(new Security());
     publicationManager.setFederationAdminService(federationAdmin);
     publicationManager.setExecutorService(executorService);
   }
@@ -82,7 +83,7 @@ public class RegistryPublicationManagerTest {
   public void testSetPublications() throws Exception {
     Metacard mcard1 = getRegistryMetacard("regId1");
     Metacard mcard2 = getRegistryMetacard("regId2");
-    ArrayList<String> locations = new ArrayList<>();
+    List<String> locations = new ArrayList<>();
     locations.add("location1");
     mcard1.setAttribute(
         new AttributeImpl(RegistryObjectMetacardType.PUBLISHED_LOCATIONS, locations));
@@ -113,7 +114,7 @@ public class RegistryPublicationManagerTest {
   public void testSetPublicationsWithNullMetacard() throws Exception {
     Metacard mcard1 = getRegistryMetacard("regId1");
     Metacard mcard2 = getRegistryMetacard(null);
-    ArrayList<String> locations = new ArrayList<>();
+    List<String> locations = new ArrayList<>();
     locations.add("location1");
     mcard1.setAttribute(
         new AttributeImpl(RegistryObjectMetacardType.PUBLISHED_LOCATIONS, locations));
@@ -133,7 +134,7 @@ public class RegistryPublicationManagerTest {
   public void testSetPublicationsWithBlankMetacard() throws Exception {
     Metacard mcard1 = getRegistryMetacard("regId1");
     Metacard mcard2 = getRegistryMetacard("");
-    ArrayList<String> locations = new ArrayList<>();
+    List<String> locations = new ArrayList<>();
     locations.add("location1");
     mcard1.setAttribute(
         new AttributeImpl(RegistryObjectMetacardType.PUBLISHED_LOCATIONS, locations));
@@ -270,7 +271,7 @@ public class RegistryPublicationManagerTest {
     return getRegistryEvent(topic, null);
   }
 
-  private Event getRegistryEvent(String topic, ArrayList<String> locations) {
+  private Event getRegistryEvent(String topic, List<String> locations) {
     Dictionary<String, Object> eventProperties = new Hashtable<>();
     Metacard mcard = getRegistryMetacard(DEFAULT_REGISTRY_ID);
     if (locations != null) {

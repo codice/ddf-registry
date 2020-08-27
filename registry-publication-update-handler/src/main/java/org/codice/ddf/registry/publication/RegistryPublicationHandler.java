@@ -23,7 +23,7 @@ import org.codice.ddf.registry.common.RegistryConstants;
 import org.codice.ddf.registry.common.metacard.RegistryObjectMetacardType;
 import org.codice.ddf.registry.common.metacard.RegistryUtility;
 import org.codice.ddf.registry.federationadmin.service.internal.RegistryPublicationService;
-import org.codice.ddf.security.common.Security;
+import org.codice.ddf.security.Security;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 import org.slf4j.Logger;
@@ -47,10 +47,15 @@ public class RegistryPublicationHandler implements EventHandler {
 
   private final ScheduledExecutorService executor;
 
+  private final Security security;
+
   public RegistryPublicationHandler(
-      RegistryPublicationService registryPublicationService, ScheduledExecutorService service) {
+      RegistryPublicationService registryPublicationService,
+      ScheduledExecutorService service,
+      Security security) {
     this.registryPublicationService = registryPublicationService;
     this.executor = service;
+    this.security = security;
   }
 
   public void destroy() {
@@ -95,8 +100,6 @@ public class RegistryPublicationHandler implements EventHandler {
     // since the last time we published send an update to the remote location
     if ((datePublished == null || datePublished.before(mcard.getModifiedDate()))) {
       try {
-        Security security = Security.getInstance();
-
         security.runAsAdminWithException(
             () -> {
               registryPublicationService.update(mcard);

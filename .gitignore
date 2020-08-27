@@ -23,6 +23,7 @@ distribution/docs/src/main/resources/content/**/.asciidoctor
 distribution/docs/src/main/resources/content/**/*.png
 **/bin
 *.factorypath
+.java-version
 # JMeter Related files to ignore
 jmeter.log
 *.jmx.log

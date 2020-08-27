@@ -16,6 +16,7 @@
 
     <reference id="registryPublicationService"
                interface="org.codice.ddf.registry.federationadmin.service.internal.RegistryPublicationService"/>
+    <reference id="security" interface="org.codice.ddf.security.Security"/>
 
     <bean id="executor" class="java.util.concurrent.Executors" factory-method="newSingleThreadScheduledExecutor">
         <argument ref="registryPublicationUpdateHandlerThreadFactory"/>
@@ -32,6 +33,7 @@
     <bean id="registryEventManager" class="org.codice.ddf.registry.publication.RegistryPublicationHandler" destroy-method="destroy">
         <argument ref="registryPublicationService"/>
         <argument ref="executor"/>
+        <argument ref="security"/>
     </bean>
 
     <service ref="registryEventManager" interface="org.osgi.service.event.EventHandler">

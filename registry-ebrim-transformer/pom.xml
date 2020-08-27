@@ -29,19 +29,9 @@
             <version>0.11.0</version>
         </dependency>
         <dependency>
-            <groupId>org.jvnet.ogc</groupId>
+            <groupId>io.github.soc</groupId>
             <artifactId>ogc-tools-gml-jts</artifactId>
             <version>${ogc-tools-gml-jts.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.vividsolutions</groupId>
-                    <artifactId>jts</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.jvnet.ogc</groupId>
-                    <artifactId>gml-v_3_1_1-schema</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.jvnet.ogc</groupId>
@@ -49,12 +39,9 @@
             <version>${gml-v_3_1_1-schema.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.vividsolutions</groupId>
+            <groupId>org.locationtech.jts</groupId>
             <artifactId>jts-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.vividsolutions</groupId>
-            <artifactId>jts-io</artifactId>
+            <version>${jts.version}</version>
         </dependency>
         <dependency>
             <groupId>ddf.catalog.core</groupId>
@@ -113,11 +100,9 @@
                             registry-common,
                             catalog-core-api-impl;scope=!test,
                             jaxb2-basics-runtime,
-                            ogc-tools-gml-jts,
-                            platform-util
+                            ogc-tools-gml-jts
                         </Embed-Dependency>
                         <Import-Package>
-                            !org.codice.ddf.platform.util,
                             *
                         </Import-Package>
                     </instructions>

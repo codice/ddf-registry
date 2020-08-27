@@ -36,6 +36,7 @@ import java.util.concurrent.TimeUnit;
 import org.codice.ddf.registry.common.RegistryConstants;
 import org.codice.ddf.registry.common.metacard.RegistryObjectMetacardType;
 import org.codice.ddf.registry.federationadmin.service.internal.FederationAdminService;
+import org.codice.ddf.security.impl.Security;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -61,7 +62,7 @@ public class RegistryMetacardHandlerTest {
   @Before
   public void setup() {
     MockitoAnnotations.initMocks(this);
-    rmh = new RegistryMetacardHandler(executorService, federationAdmin);
+    rmh = new RegistryMetacardHandler(executorService, federationAdmin, new Security());
     mcardInternal = new MetacardImpl();
     mcardInternal.setModifiedDate(new Date());
     mcardInternal.setId("internalId");
