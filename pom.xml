@@ -46,7 +46,7 @@
         <!-- Must MANUALLY update this if the codice-test project's version changes -->
         <codice-test.version>0.3</codice-test.version>
         <commons-collections.version>3.2.2</commons-collections.version>
-        <commons-collections4.version>4.1</commons-collections4.version>
+        <commons-collections4.version>4.4</commons-collections4.version>
         <commons-lang3.version>3.9</commons-lang3.version>
         <ddf.jaxb.version>1.0.1</ddf.jaxb.version>
         <ddf.support.version>2.3.16</ddf.support.version>
@@ -530,7 +530,7 @@
                             </goals>
                             <configuration>
                                 <rules>
-                                    <ArtifactSizeEnforcerRule implementation="org.codice.maven.artifactsize.ArtifactSizeEnforcerRule" />
+                                    <ArtifactSizeEnforcerRule implementation="org.codice.maven.artifactsize.ArtifactSizeEnforcerRule"/>
                                 </rules>
                             </configuration>
                         </execution>
