@@ -65,7 +65,7 @@
         <jsoup.version>1.11.3</jsoup.version>
         <jts.spatial4j.version>1.15.0</jts.spatial4j.version>
         <jts.version>1.16.0</jts.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <jvnet.jaxb2.version>0.10.0</jvnet.jaxb2.version>
         <karaf.version>4.2.6</karaf.version>
         <logback.classic.version>1.2.3</logback.classic.version>
