@@ -87,7 +87,7 @@
         <servicemix-depends.version>1.4.0</servicemix-depends.version>
         <spring-osgi.version>1.2.1</spring-osgi.version>
         <xmlunit.version>1.4</xmlunit.version>
-        <xstream.version>1.4.11.1</xstream.version>
+        <xstream.version>1.4.18</xstream.version>
     </properties>
     <dependencyManagement>
         <dependencies>
